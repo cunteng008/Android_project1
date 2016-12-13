@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 添加一个ListView控件 -->
+       <ListView
+        android:id="@+id/lv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="70dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:listSelector="@android:color/transparent"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_alignWithParentIfMissing="false">
+        <Spinner
+            android:entries="@array/months"
+            android:id="@+id/month_spinner"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight = "1"/>
+        <Spinner
+            android:id="@+id/year_spinner"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight = "1"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="0dp">
+            <ImageView
+                android:id="@+id/add_imageView"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="0dp"
+                android:src="@drawable/add"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="0dp">
+
+            <ImageView
+                android:id="@+id/view_imageView"
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:src="@drawable/view_all_diary"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="0dp">
+
+            <ImageView
+                android:id="@+id/setting_imageView"
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:src="@drawable/set"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
+

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.cunteng008.daygram.activity.iputTextActivity"
+    android:background="@drawable/iput_text_background"
+    android:paddingBottom="13dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight = "40"
+        android:orientation="vertical"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/iputTextTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@id/iputTextTitle"
+            android:textSize="20sp"
+            android:layout_marginBottom="10dp"/>
+        <TextView
+            android:layout_width="250dp"
+            android:layout_height="1dp"
+            android:background="#0d0c0c"
+            android:layout_alignParentBottom="true"/>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight = "150"
+        android:gravity="top"
+        android:background="@null"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight = "20"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <Button
+            android:id="@+id/Time"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="TIME"
+            android:layout_weight = "1"
+            android:layout_marginLeft="30dp"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"/>
+        <Button
+            android:id="@+id/Done"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/DONE"
+            android:layout_weight = "1"
+            android:layout_marginRight="30dp"/>
+    </LinearLayout>
+
+</LinearLayout>
