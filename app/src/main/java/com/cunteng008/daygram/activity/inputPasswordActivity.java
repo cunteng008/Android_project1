@@ -1,7 +1,9 @@
 package com.cunteng008.daygram.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.media.Image;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +18,8 @@ import android.widget.TextView;
 
 import com.cunteng008.daygram.R;
 
+import static com.cunteng008.daygram.constant.Constant.LOCK_OFF;
+import static com.cunteng008.daygram.constant.Constant.LOCK_ON;
 import static com.cunteng008.daygram.constant.Constant.LONG_IN;
 import static com.cunteng008.daygram.constant.Constant.RESET_LOCK;
 
@@ -24,7 +28,7 @@ public class inputPasswordActivity extends AppCompatActivity {
     private EditText mEditPassword;
     private String mInputPassword="";
 
-    //代表显示密码的4的圆点
+    //显示的4位密码(圆点)
     private TextView mPassword1;
     private TextView mPassword2;
     private TextView mPassword3;
@@ -65,6 +69,7 @@ public class inputPasswordActivity extends AppCompatActivity {
         mIntent = getIntent();
         mType =  Integer.parseInt(mIntent.getStringExtra("input_password"));
 
+        //监听editText的内容，当有内容输入时，则将一个原点描黑，删除原点换另一种背景
         mEditPassword.addTextChangedListener(new TextWatcher(){
             @Override
             public void afterTextChanged(Editable s) {
@@ -82,7 +87,20 @@ public class inputPasswordActivity extends AppCompatActivity {
                         if(mInputPassword.equals(daygramActivity.mMyLock.getPassword())){
                             if (mType == LONG_IN){
                                 finish();
-                            }else if(mType == RESET_LOCK && mNewPsdIputTimes == -1){
+                            }else if(mType == LOCK_OFF){
+                                daygramActivity.mMyLock.setLock(false);
+                                Intent mIntent = new Intent(inputPasswordActivity.this,settingActivity.class);
+                                mIntent.putExtra("input_password", LOCK_OFF+"");
+                                startActivity(mIntent);
+                                finish();
+                            }else if(mType == LOCK_ON){
+                                daygramActivity.mMyLock.setLock(true);
+                                Intent mIntent = new Intent(inputPasswordActivity.this,settingActivity.class);
+                                mIntent.putExtra("input_password", LOCK_OFF+"");
+                                startActivity(mIntent);
+                                finish();
+                            }
+                            else if(mType == RESET_LOCK && mNewPsdIputTimes == -1){
                                 mNewPsdIputTimes ++;
                                 mIputHintText.setText(R.string.input_new_psd);
                                 InputShowTimer.start();
@@ -104,9 +122,12 @@ public class inputPasswordActivity extends AppCompatActivity {
                     }else if(mNewPsdIputTimes == 1  ){  //新密码输入二次
                         if(mNewPsd.equals(mInputPassword)){
                             daygramActivity.mMyLock.setPassword(mNewPsd);
+                            Intent mIntent = new Intent(inputPasswordActivity.this,settingActivity.class);
+                            mIntent.putExtra("input_password", LOCK_OFF+"");
+                            startActivity(mIntent);
                             finish();
                         }else {
-                            mInputHint.setVisibility(View.GONE);
+                            mInputHint.setVisibility(View.GONE);  //将提示输入的信息撤销
                             mErrorHint.setVisibility(View.VISIBLE);
                             mErrorHintText.setText(R.string.psd_diff);  //两次输入不一致
                             mPassword1.setBackgroundResource(R.drawable.password_circle_error);
@@ -223,11 +244,15 @@ public class inputPasswordActivity extends AppCompatActivity {
     // 捕获返回键
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         if(mType == LONG_IN){
             //关闭整个程序
             SysApplication.getInstance().exit();
+        }else if(mType == LOCK_ON || mType == LOCK_OFF){
+            Intent mIntent = new Intent(inputPasswordActivity.this,settingActivity.class);
+            mIntent.putExtra("input_password", LOCK_OFF+"");
+            startActivity(mIntent);
         }
+        super.onBackPressed();
     }
 
 
@@ -248,6 +273,4 @@ public class inputPasswordActivity extends AppCompatActivity {
             }
         }
     };  */
-
-
 }

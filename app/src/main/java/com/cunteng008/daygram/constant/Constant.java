@@ -17,5 +17,7 @@ public class Constant {
     //重置密码和登陆等常量
     public final static int RESET_LOCK = 5;
     public final static int LONG_IN = 6;
+    public final static int LOCK_ON = 7;
+    public final static int LOCK_OFF = 8;
 
 }

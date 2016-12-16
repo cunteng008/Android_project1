@@ -1,5 +1,6 @@
 package com.cunteng008.daygram.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,10 @@ import android.widget.Toast;
 
 import com.cunteng008.daygram.R;
 import com.cunteng008.daygram.constant.Constant;
+
+import static com.cunteng008.daygram.constant.Constant.LOCK_OFF;
+import static com.cunteng008.daygram.constant.Constant.LOCK_ON;
+import static com.cunteng008.daygram.constant.Constant.RESET_LOCK;
 
 public class settingActivity extends AppCompatActivity {
     //控件
@@ -42,11 +47,15 @@ public class settingActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == mRadioButtonLockOff.getId()) {
-                    daygramActivity.mMyLock.setLock(false);
-                    Toast.makeText(settingActivity.this, "lock off", Toast.LENGTH_SHORT).show();
+                    Intent mIntent = new Intent(settingActivity.this,inputPasswordActivity.class);
+                    mIntent.putExtra("input_password", LOCK_OFF+"");
+                    startActivity(mIntent);
+                    finish();
                 } else if (checkedId == mRadioButtonLockOn.getId()) {
-                    daygramActivity.mMyLock.setLock(true);
-                    Toast.makeText(settingActivity.this, "lock on", Toast.LENGTH_SHORT).show();
+                    Intent mIntent = new Intent(settingActivity.this,inputPasswordActivity.class);
+                    mIntent.putExtra("input_password", LOCK_ON+"");
+                    startActivity(mIntent);
+                    finish();
                 }
             }
         });
@@ -55,8 +64,9 @@ public class settingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent mIntent = new Intent(settingActivity.this,inputPasswordActivity.class);
-                mIntent.putExtra("input_password", Constant.RESET_LOCK+"");
+                mIntent.putExtra("input_password", RESET_LOCK+"");
                 startActivity(mIntent);
+                finish();
             }
         });
 
@@ -68,4 +78,18 @@ public class settingActivity extends AppCompatActivity {
             }
         });
     }
+/*
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(resultCode!= Activity.RESULT_OK)  //请求失败
+            return;
+        if(requestCode == 3){    //对应启动的代号3
+           if(daygramActivity.mMyLock.isLock()){
+               mRadioButtonLockOn.setChecked(true);
+           }else {
+               mRadioButtonLockOff.setChecked(true);
+           }
+        }
+    } */
 }

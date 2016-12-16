@@ -36,6 +36,7 @@ public class iputTextActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_iput_text);
+        AndroidBug5497Workaround.assistActivity(this);
 
         mTextView = (TextView) findViewById(R.id.iputTextTitle);
         mTimeButton = (Button) findViewById(R.id.Time);
