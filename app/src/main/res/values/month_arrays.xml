@@ -13,5 +13,6 @@
         <item name="October">October</item>
         <item name="November">November</item>
         <item name="December">December</item>
+        <item name="none"></item>
     </string-array>
 </resources>

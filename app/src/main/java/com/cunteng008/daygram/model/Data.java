@@ -11,7 +11,7 @@ public class Data implements Serializable {
     private int mWeek;
     private int mMonth;
     private String mContent;
-    private int mContentSize;
+
 
     public int getYear() {
         return mYear;
@@ -51,14 +51,6 @@ public class Data implements Serializable {
 
     public void setContent(String content) {
         mContent = content;
-    }
-
-    public int getContentSize() {
-        return mContentSize;
-    }
-
-    public void setContentSize(int contentSize) {
-        mContentSize = contentSize;
     }
 
     public String getTime() {

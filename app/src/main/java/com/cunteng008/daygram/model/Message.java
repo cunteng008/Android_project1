@@ -7,10 +7,11 @@ import java.io.Serializable;
  */
 public class Message implements Serializable {
     private String mContent;
-    private int mPos;
+    private int mPos;  //信息带了一个位置
     private int mWeek;
     private int mYear;
     private int mMonth;
+    private int mDate;
 
     public String getContent() {
         return mContent;
@@ -50,5 +51,13 @@ public class Message implements Serializable {
 
     public void setMonth(int month) {
         mMonth = month;
+    }
+
+    public int getDate() {
+        return mDate;
+    }
+
+    public void setDate(int date) {
+        mDate = date;
     }
 }

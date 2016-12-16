@@ -19,9 +19,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.iputTextActivity">
+        <activity
+            android:name=".activity.iputTextActivity"
+            android:windowSoftInputMode="adjustResize">
         </activity>
         <activity android:name=".activity.settingActivity">
+        </activity>
+        <activity android:name=".activity.inputPasswordActivity"
+                  android:windowSoftInputMode="stateVisible">
         </activity>
     </application>
 

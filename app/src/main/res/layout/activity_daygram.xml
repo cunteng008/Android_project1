@@ -6,11 +6,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!-- 添加一个ListView控件 -->
-       <ListView
+       <com.cunteng008.daygram.widget.MyListView
         android:id="@+id/lv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="70dp"
+        android:layout_marginBottom="60dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -22,14 +22,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_alignWithParentIfMissing="false">
         <Spinner
-            android:entries="@array/months"
             android:id="@+id/month_spinner"
+            android:entries="@array/months"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight = "1"/>

@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.cunteng008.daygram.activity.iputTextActivity"
     android:background="@drawable/iput_text_background"
-    android:paddingBottom="13dp"
-    android:orientation="vertical">
-
-    <LinearLayout
+    android:paddingBottom="8dp">
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight = "40"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:layout_height="0dp">
+    </ScrollView>
+    <LinearLayout
+        android:id="@+id/head"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
         <TextView
             android:id="@+id/iputTextTitle"
             android:layout_width="wrap_content"
@@ -29,40 +30,40 @@
             android:layout_alignParentBottom="true"/>
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/foot"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:id="@+id/Done"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:text="@string/DONE"
+            android:layout_alignParentLeft="true"/>
+        <Button
+            android:id="@+id/Time"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:text="TIME"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+
     <EditText
         android:id="@+id/editText"
+        android:layout_above="@id/foot"
+        android:layout_below="@id/head"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight = "150"
+        android:layout_height="match_parent"
         android:gravity="top"
         android:background="@null"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight = "20"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <Button
-            android:id="@+id/Time"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:text="TIME"
-            android:layout_weight = "1"
-            android:layout_marginLeft="30dp"/>
-        <View
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"/>
-        <Button
-            android:id="@+id/Done"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:text="@string/DONE"
-            android:layout_weight = "1"
-            android:layout_marginRight="30dp"/>
-    </LinearLayout>
 
-</LinearLayout>
+
+</RelativeLayout>

@@ -31,27 +31,32 @@ public class myAdapter extends BaseAdapter {
     private static final int TYPE_ViewAll = 3 ;
 
     private Context mcontext;
-    private List<Data> mdata = new ArrayList<Data>();
-    private boolean isViewAll ;
+    private List<Data> mMonthData = new ArrayList<Data>();
+    private boolean mIsViewAll;
 
-    public myAdapter(Context context, ArrayList<Data> listItem,boolean isViewAll) {
+    public myAdapter(Context context, ArrayList<Data> listItems,boolean isViewAll) {
         mcontext = context;
-            mdata.addAll(listItem);
-        this.isViewAll = isViewAll;
+            mMonthData.addAll(listItems);
+        this.mIsViewAll = isViewAll;
     }
 
-
+    public void setMonthData(ArrayList<Data> listItems){
+        mMonthData = listItems;
+    }
+    public void setIsViewAll(boolean isViewAll){
+        mIsViewAll = isViewAll;
+    }
     @Override
     public int getItemViewType(int position) {
         int result = 0;
-        if(isViewAll){
+        if(mIsViewAll){
             result = TYPE_ViewAll;
         }
-        else if (mdata.get(position).getContentSize()>0) {
+        else if (mMonthData.get(position).getContent().length()>0) {
             result = TYPE_Pane;
         }
-        else if(mdata.get(position).getContentSize()==0){
-            if(mdata.get(position).getWeek() == 0)
+        else if(mMonthData.get(position).getContent().length()==0){
+            if(mMonthData.get(position).getWeek() == 0)
             result = TYPE_RedDrop;
             else
                 result = TYPE_BlackDrop;
@@ -65,11 +70,11 @@ public class myAdapter extends BaseAdapter {
     }
     @Override
     public int getCount() {
-        return mdata.size();
+        return mMonthData.size();
     }
     @Override
     public Object getItem(int position) {
-        return mdata.get(position);
+        return mMonthData.get(position);
     }
     @Override
     public long getItemId(int position) {
@@ -119,13 +124,14 @@ public class myAdapter extends BaseAdapter {
         switch (type)
         {
             case TYPE_Pane:
-                Data data = (Data) mdata.get(position);
+                Data data = (Data) mMonthData.get(position);
                 holder1.Week.setText(Constant.SHORT_WEEK[data.getWeek()]);
                 holder1.Date.setText(""+data.getDate());
                 holder1.Content.setText(data.getContent());
                 break;
             case TYPE_ViewAll:
-                Data data2 = (Data) mdata.get(position);
+                Data data2 = (Data) mMonthData.get(position);
+
                     int whatWeek = data2.getWeek();
                     int whatYear = data2.getYear();
                     int date = data2.getDate();

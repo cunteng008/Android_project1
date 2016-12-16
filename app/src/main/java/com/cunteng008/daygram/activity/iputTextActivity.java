@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.cunteng008.daygram.constant.Constant;
@@ -28,19 +29,28 @@ public class iputTextActivity extends AppCompatActivity {
 
     private Button mTimeButton;
     private Button mDoneButton;
+    private TextView mTextView;
+    private  EditText mEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_iput_text);
 
+        mTextView = (TextView) findViewById(R.id.iputTextTitle);
+        mTimeButton = (Button) findViewById(R.id.Time);
+        mDoneButton = (Button) findViewById(R.id.Done);
+        mEditText= (EditText) findViewById(R.id.editText);
+
+        //mDoneButton.setVisibility(View.INVISIBLE);
+        //mTimeButton.setVisibility(View.INVISIBLE);
+
         final Message msg = (Message) getIntent().getSerializableExtra(daygramActivity.SER_KEY);
 
         int whatWeek = msg.getWeek();
         int whatYear = msg.getYear();
-        int date = msg.getPos()+1;
+        int date = msg.getDate();
         int whatMonth = msg.getMonth();
-        TextView mTextView = (TextView) findViewById(R.id.iputTextTitle);
 
         String str = Constant.WEEK[whatWeek]+"/"+Constant.MONTH[whatMonth-1]+" "+date+
                 "/"+whatYear;
@@ -54,21 +64,25 @@ public class iputTextActivity extends AppCompatActivity {
             style.setSpan(new ForegroundColorSpan(Color.RED),fstart,fend,
                     Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
         }
-         mTextView.setText(style);
+        mTextView.setText(style);
 
-        final EditText edT = (EditText) findViewById(R.id.editText);
-        edT.setText(msg.getContent());
-        edT.setSelection(msg.getContent().length());
-
-
-
-        mDoneButton = (Button) findViewById(R.id.Done);
+        mEditText.setText(msg.getContent());
+        mEditText.setSelection(msg.getContent().length());
+        /*
+        mEditText.setOnTouchListener(new View.OnTouchListener(){
+            @Override
+            public boolean onTouch(View v,MotionEvent event){
+                mTimeButton.setVisibility(View.VISIBLE);
+                mDoneButton.setVisibility(View.VISIBLE);
+                return false;
+            }
+        });  */
 
         mDoneButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                String input = edT.getText().toString();
-                //edT.setText(input);
+                String input = mEditText.getText().toString();
+                //mEditText.setText(input);
                 Intent data=new Intent();  //onActivityResult的data
 
                 Bundle mBundle = new Bundle();
@@ -80,26 +94,33 @@ public class iputTextActivity extends AppCompatActivity {
 
             }
         });
-        mTimeButton = (Button) findViewById(R.id.Time);
         mTimeButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                int index = edT.getSelectionStart();//获取光标所在位置
+                int index = mEditText.getSelectionStart();//获取光标所在位置
                 Calendar c = Calendar.getInstance();
                 int hour = c.get(Calendar.HOUR_OF_DAY);
                 int minute = c.get(Calendar.MINUTE);
-                if (index < 0 || index >= edT.length()) {
-                    edT.append("("+hour+":"+minute+")");
+                if (index < 0 || index >= mEditText.length()) {
+                    mEditText.append(insertTime(hour,minute));
                 } else {
                     //直接有时edT无法调用insert
-                    Editable text = edT.getText();
-                    text.insert(index,"("+hour+":"+minute+")"); //光标所在位置插入文字
+                    Editable text = mEditText.getText();
+                    text.insert(index,insertTime(hour,minute)); //光标所在位置插入文字
                 }
 
             }
         });
-
-
-
+    }
+    private String insertTime(int hour,int minute){
+        if(hour>=10&& minute>=10){
+            return "("+hour+":"+minute+")";
+        }else if(hour<10&&minute>=10){
+            return "(0"+hour+":"+minute+")";
+        }else if(hour>=10&&minute<10){
+            return "("+hour+":0"+minute+")";
+        }else {
+            return "(0"+hour+":0"+minute+")";
+        }
     }
 }

@@ -6,7 +6,12 @@
     <item name="tag_pane" type="id">2</item>
     <item name="tag_view_all" type="id">3</item>
     <string name="SER_KEY"></string>
-
     <string name="DONE">DONE</string>
+    
+    <string name="input_new_psd_again">确认新密码</string>
+    <string name="input_password">请输入密码</string>
+    <string name="input_new_psd">请输入新密码</string>
+    <string name="psd_error">密码错误</string>
+    <string name="psd_diff">密码不一致</string>
 
 </resources>

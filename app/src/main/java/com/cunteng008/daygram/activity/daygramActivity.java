@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +15,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -23,6 +23,8 @@ import com.cunteng008.daygram.model.Data;
 import com.cunteng008.daygram.model.Message;
 import com.cunteng008.daygram.R;
 import com.cunteng008.daygram.adapter.myAdapter;
+import com.cunteng008.daygram.model.Lock;
+import com.cunteng008.daygram.widget.MyListView;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -35,51 +37,70 @@ import java.util.Calendar;
 
 
 public class daygramActivity extends AppCompatActivity {
+    //常量
     public  final static String SER_KEY = "com.cunteng008.daygram.myser";
-    public final static String VIEW_ALLL_DIARY = "com.cunteng008.daygram.view_all_diary";
+    private final static String SUFFIX_FILE_NAME = "daygram_data_save.txt";
+    private final static String PASSWORD_FILE_NAME = "com.cunteng008.daygram.psd";
 
-    private final   static String SUFFIX_FILE_NAME = "daygram_data_save.txt";
-    private String FILE_NAME;
+    //变化文件名
+    private String FILE_NAME;  //用来放每个月的日记的文件名
 
-    private ListView mlv;
+    //显示日记列表
+    private MyListView mlv;
     private myAdapter mmyAdapter;
+    private int mSelectYear;  //选择的年月
+    private int mSelectMonth;
+    private int mPresentYear;  //当前年月
+    private int mPresentMonth;
+    public static int mDateOfToday;
+    private int mlvPosition = 0;
+    private ArrayList<Data> mMonthData = new ArrayList<Data>(); //一个月的日记数据链表
+    private ArrayList<Data> mTempleData = new ArrayList<Data>(); //临时放置日记
 
+    //布局控件
     private Spinner mMonthSpinner;
     private Spinner mYearSpinner;
     private ImageView mAddImageView;
     private ImageView mViewImageView;
     private ImageView mSettingImageView;
-    private int mPresentYear;
-    private int mPresentMonth;
-    private int mlvPosition = 0;
 
-    //设置开关
+    //设置查看日记开关
     private boolean mViewImageViewSwitch = false;
 
-    //一个月的日记数据链表
-    private ArrayList<Data> mDataList = new ArrayList<Data>();
+    //密码
+    public static Lock mMyLock = new Lock(false,"1234");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_daygram);
+        SysApplication.getInstance().addActivity(this);  // 将该activity添加到list中去。
+
+        if(getObject(PASSWORD_FILE_NAME) != null){
+            mMyLock = (Lock) getObject(PASSWORD_FILE_NAME);
+            if(mMyLock.isLock()){
+                Intent intent = new Intent(daygramActivity.this,inputPasswordActivity.class);
+                intent.putExtra("input_password", Constant.LONG_IN+"");
+                startActivity(intent);
+            }
+        }
 
         Calendar c = Calendar.getInstance();  //日历
-        mPresentYear =  c.get(Calendar.YEAR);
-        mPresentMonth = c.get(Calendar.MONTH)+1;  //一月对应0，十二月对应11
+
+        mPresentYear = mSelectYear =  c.get(Calendar.YEAR);
+        mPresentMonth = mSelectMonth = c.get(Calendar.MONTH)+1;  //一月对应0，十二月对应11
         mMonthSpinner = (Spinner) findViewById(R.id.month_spinner);
-        mMonthSpinner.setSelection(mPresentMonth-1,true);
+        mMonthSpinner.setSelection(mSelectMonth -1,true);
         mMonthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String result = adapterView.getItemAtPosition(i).toString();
                 Log.i("mMonthSpinner 示例",result);
-                mPresentMonth = i+1;
+                mSelectMonth = i+1;
                 Toast.makeText(daygramActivity.this, Constant.MONTH[i],Toast.LENGTH_SHORT).show();
-                upDateData(mPresentYear,mPresentMonth);
+                upDateData(mSelectYear, mSelectMonth);
             }
             @Override
             public void onNothingSelected(AdapterView<?> arg0){
@@ -106,8 +127,8 @@ public class daygramActivity extends AppCompatActivity {
                 String result = adapterView.getItemAtPosition(i).toString();
                 Toast.makeText(daygramActivity.this, result,Toast.LENGTH_SHORT).show();
 
-                mPresentYear =Integer.valueOf(result).intValue() ;
-                upDateData(mPresentYear,mPresentMonth);
+                mSelectYear =Integer.valueOf(result).intValue() ;
+                upDateData(mSelectYear, mSelectMonth);
                 Log.i("mYearSpinner ",result);
             }
             @Override
@@ -117,23 +138,57 @@ public class daygramActivity extends AppCompatActivity {
         });
 
         //初始化数据
-        init(mPresentYear,mPresentMonth);
+        init(mSelectYear, mSelectMonth);
 
         mAddImageView =(ImageView) findViewById(R.id.add_imageView);
         mAddImageView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                if(mViewImageViewSwitch){
+                    Toast.makeText(daygramActivity.this,"阅览未结束，不能创建新日记",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(mPresentMonth != mSelectMonth || mPresentYear!=mSelectYear){
+                    mSelectMonth = mPresentMonth;
+                    mSelectYear = mPresentYear;
+                    mYearSpinner.setSelection(0,true);
+                    mMonthSpinner.setSelection(mSelectMonth -1,true);
+                    upDateData(mSelectYear, mSelectMonth);
+                }
                 addNew();
             }
         });
 
+        //利用刷新的方法来显示listview下拉超出时利用headview显示时间
+        mlv.setOnrefreshListener(new MyListView.OnrefreshListener() {
+            @Override
+            public void refresh() {
+                new AsyncTask<Void,Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        return null;
+                    }
+                    protected void onPostExecute(Void result) {
+                        mmyAdapter.notifyDataSetChanged();
+                        mlv.onRefreshComplete();
+                    };
+                }.execute();
+            }
+        });
         //下面两个函数针对listview item的滚动和点击事件
         mlv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             // i 表示第几个item响应
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Toast.makeText(daygramActivity.this,mDataList.get(i).getTime(),Toast.LENGTH_SHORT).show();
-                    SerializeMethod(i);
+                if(mViewImageViewSwitch){
+                    int index = mTempleData.get(i-1).getDate()-1;
+                    Toast.makeText(daygramActivity.this, mMonthData.get(index).getTime(),Toast.LENGTH_SHORT).show();
+                    SerializeMethod(i-1);
+                }else {
+                    Toast.makeText(daygramActivity.this, mMonthData.get(i-1).getTime(),Toast.LENGTH_SHORT).show();
+                    SerializeMethod(i-1);
+                }
             }
         });
         mlv.setSelection(mlvPosition);
@@ -158,18 +213,15 @@ public class daygramActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            final int position, long id) {
-                final Data data = mDataList.get(position);
                 //定义AlertDialog.Builder对象，当长按列表项的时候弹出确认删除对话框
                 AlertDialog.Builder builder=new AlertDialog.Builder(daygramActivity.this);
-                builder.setMessage("你确定要删除"+data.getTime()+"的日记");
+                builder.setMessage("你确定要删除"+ mMonthData.get(position-1).getTime()+"的日记");
                 builder.setTitle("提示");
                 //添加AlertDialog.Builder对象的setPositiveButton()方法
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        data.setContent("");
-                        mDataList.set(position,data);
-                        data.setContentSize(data.getContent().length());
+                        mMonthData.get(position-1).setContent("");
                         bindAdapter();
                         Toast.makeText(getBaseContext(), "已删除", Toast.LENGTH_SHORT).show();
                     }
@@ -189,16 +241,28 @@ public class daygramActivity extends AppCompatActivity {
         });
 
 
-    mViewImageView = (ImageView) findViewById(R.id.view_imageView);
+        mViewImageView = (ImageView) findViewById(R.id.view_imageView);
         mViewImageView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                Log.d("viewall","阅览");
                 if(!mViewImageViewSwitch){
-                    viewDiary();
+                    Toast.makeText(daygramActivity.this,"阅览日记",Toast.LENGTH_SHORT).show();
+                    mTempleData.clear();
+                    for(Data data: mMonthData){
+                        if(data.getContent().length()>0){
+                            mTempleData.add(data);
+                        }
+                    }
+                    mmyAdapter.setIsViewAll(true);
+                    mmyAdapter.setMonthData(mTempleData);
+                    mmyAdapter.notifyDataSetChanged();
                     mViewImageViewSwitch = true;
-                }
-                else {
-                    upDateData(mPresentYear,mPresentMonth);
+                } else {
+                    Toast.makeText(daygramActivity.this,"关闭阅览",Toast.LENGTH_SHORT).show();
+                    mmyAdapter.setIsViewAll(false);
+                    mmyAdapter.setMonthData(mMonthData);
+                    mmyAdapter.notifyDataSetChanged();
                     mViewImageViewSwitch = false;
                 }
             }
@@ -208,6 +272,7 @@ public class daygramActivity extends AppCompatActivity {
         mSettingImageView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                Toast.makeText(daygramActivity.this, "设置", Toast.LENGTH_SHORT).show();
                 Intent mIntent = new Intent(daygramActivity.this,settingActivity.class);
                 startActivityForResult(mIntent,2);  //本次操作代号为2
             }
@@ -227,11 +292,17 @@ public class daygramActivity extends AppCompatActivity {
             Message msg = (Message) data.getSerializableExtra(iputTextActivity.IPUT_TEXT_RETURN_CONTENT);  //没问题
             if(msg == null)
                 return;
-            if(!mViewImageViewSwitch){
-                updateData(msg);
-            }
-            else {
-                viewDiaryUpdate(msg);
+            if(mViewImageViewSwitch){
+                mTempleData.get(msg.getPos()).setContent(msg.getContent());
+                int index = mTempleData.get(msg.getPos()).getDate()-1;
+                mMonthData.get(index).setContent(msg.getContent());
+                if(msg.getContent().length()==0){
+                    mTempleData.remove(msg.getPos());
+                }
+                mmyAdapter.notifyDataSetChanged();
+            } else {
+                mMonthData.get(msg.getPos()).setContent(msg.getContent());
+                mmyAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -255,24 +326,23 @@ public class daygramActivity extends AppCompatActivity {
                 data.setYear(y);
                 data.setMonth(m);
                 data.setContent("");
-                data.setContentSize(data.getContent().length());
-                mDataList.add(data);
+                mMonthData.add(data);
             }
-        }
-        else {
-            mDataList = (ArrayList<Data>) getObject(FILE_NAME);
+        } else {
+            mMonthData = (ArrayList<Data>) getObject(FILE_NAME);
         }
         bindAdapter();
-        mlv.setBackgroundColor(888888888);
     }
+
+    //加载另一个月的新数据
     protected void upDateData(int y,int m){
-        saveObject(mDataList,FILE_NAME);
+        saveObject(mMonthData,FILE_NAME);
         int days;
         Calendar c = Calendar.getInstance();
         c.set(y,m,1);
         days = getDayNumber(y,m);
 
-        mDataList = new ArrayList<Data>();
+        mMonthData = new ArrayList<Data>();
         FILE_NAME = y +""+ m + SUFFIX_FILE_NAME ;
 
         if(getObject(FILE_NAME)== null ){
@@ -286,31 +356,49 @@ public class daygramActivity extends AppCompatActivity {
                 data.setYear(y);
                 data.setMonth(m);
                 data.setContent("");
-                data.setContentSize(data.getContent().length());
-                mDataList.add(i,data);
+                mMonthData.add(i,data);
             }
         }
         else {
-            mDataList = (ArrayList<Data>) getObject(FILE_NAME);
+            mMonthData = (ArrayList<Data>) getObject(FILE_NAME);
         }
-        bindAdapter();
+        if(mViewImageViewSwitch){
+            mTempleData.clear();
+            for(Data data: mMonthData){
+                if(data.getContent().length()>0){
+                    mTempleData.add(data);
+                }
+            }
+            mmyAdapter.notifyDataSetChanged();
+        }else{
+            //数据改变，需要重新设置数据
+            mmyAdapter.setMonthData(mMonthData);
+            mmyAdapter.notifyDataSetChanged();
+        }
     }
+    /*
     protected void updateData(Message msg) {
-        Data data = mDataList.get(msg.getPos());
+        Data data = mMonthData.get(msg.getPos());
         data.setContent(msg.getContent());
-        data.setContentSize( msg.getContent().length());
-        mDataList.set(msg.getPos(),data);
+        mMonthData.set(msg.getPos(),data);
         mmyAdapter.notifyDataSetChanged();
-    }
+    } */
 
     protected void SerializeMethod(int pos){
         Message msg = new Message();
-        int date = pos+1;
-        msg.setContent(mDataList.get(pos).getContent());
-        msg.setPos(pos);
-        msg.setYear(mDataList.get(pos).getYear());
-        msg.setWeek(mDataList.get(pos).getWeek());
-        msg.setMonth(mDataList.get(pos).getMonth());
+        int date;
+        if(mViewImageViewSwitch){
+            date = mTempleData.get(pos).getDate();
+        }else {
+            date  = pos+1;
+        }
+        msg.setPos(pos);  //pos为listview项的实际点击位置
+        pos = date -1;  //相对mMonthData的位置
+        msg.setContent(mMonthData.get(pos).getContent());
+        msg.setYear(mMonthData.get(pos).getYear());
+        msg.setWeek(mMonthData.get(pos).getWeek());
+        msg.setMonth(mMonthData.get(pos).getMonth());
+        msg.setDate(mMonthData.get(pos).getDate());
         Intent mIntent = new Intent(daygramActivity.this,iputTextActivity.class);
         Bundle mBundle = new Bundle();
         mBundle.putSerializable(SER_KEY,msg);
@@ -319,8 +407,8 @@ public class daygramActivity extends AppCompatActivity {
         startActivityForResult(mIntent,1);  //本次操作代号为1
     }
     protected void bindAdapter(){
-        mmyAdapter = new myAdapter(daygramActivity.this,mDataList,false);
-        mlv = (ListView) findViewById(R.id.lv);  /*定义一个动态数组*/
+        mmyAdapter = new myAdapter(daygramActivity.this, mMonthData,false);
+        mlv = (MyListView) findViewById(R.id.lv);  /*定义一个动态数组*/
         mlv.setAdapter(mmyAdapter);  //为ListView绑定适配器
     }
 
@@ -328,14 +416,14 @@ public class daygramActivity extends AppCompatActivity {
         Calendar c = Calendar.getInstance();
         int date = c.get(Calendar.DAY_OF_MONTH);
         int pos = date - 1;
-
         Message msg = new Message();
-        Data data = mDataList.get(pos);
+        Data data = mMonthData.get(pos);
         msg.setContent( data.getContent());
         msg.setPos(date-1);
-        msg.setYear(mDataList.get(pos).getYear());
-        msg.setWeek(mDataList.get(pos).getWeek());
-        msg.setMonth(mDataList.get(pos).getMonth());
+        msg.setYear(mMonthData.get(pos).getYear());
+        msg.setWeek(mMonthData.get(pos).getWeek());
+        msg.setMonth(mMonthData.get(pos).getMonth());
+        msg.setDate(date);
 
         Intent mIntent = new Intent(daygramActivity.this,iputTextActivity.class);
         Bundle mBundle = new Bundle();
@@ -344,6 +432,7 @@ public class daygramActivity extends AppCompatActivity {
         startActivityForResult(mIntent,1);
     }
 
+    //存取文件
     private void saveObject(Object o,String name){
         FileOutputStream fos = null;
         ObjectOutputStream oos = null;
@@ -373,7 +462,6 @@ public class daygramActivity extends AppCompatActivity {
             }
         }
     }
-
     private Object getObject(String name){
         FileInputStream fis = null;
         ObjectInputStream ois = null;
@@ -406,6 +494,7 @@ public class daygramActivity extends AppCompatActivity {
         return null;
     }
 
+    //根据年月得到该月的天数
     private int getDayNumber(int year, int month) {
         int days[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
         if (2 == month && 0 == (year % 4) && (0 != (year % 100) || 0 == (year % 400))) {
@@ -414,6 +503,7 @@ public class daygramActivity extends AppCompatActivity {
         return (days[month - 1]);
     }
 
+    //根据日期得到该日在一个周的第几天
     private int getWeek(Date date){
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -424,28 +514,19 @@ public class daygramActivity extends AppCompatActivity {
         return week_index;
     }
 
-    private void viewDiary(){
-        mmyAdapter = new myAdapter(daygramActivity.this,mDataList,true);
-        mlv.setAdapter(mmyAdapter);  //为ListView绑定适配器
-    }
-    private void viewDiaryUpdate(Message msg){
-        Data data = mDataList.get(msg.getPos());
-        data.setContent(msg.getContent());
-        data.setContentSize( msg.getContent().length());
-        mDataList.set(msg.getPos(),data);
-        mmyAdapter.notifyDataSetChanged();
-    }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        saveObject(mDataList,FILE_NAME);
+    private void viewDiaryUpdate(Message msg){
+        Data data = mMonthData.get(msg.getPos());
+        data.setContent(msg.getContent());
+        mMonthData.set(msg.getPos(),data);
+        mmyAdapter.notifyDataSetChanged();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        saveObject(mDataList,FILE_NAME);
+        saveObject(mMonthData,FILE_NAME);
+        saveObject(mMyLock,PASSWORD_FILE_NAME);
     }
 }
 
