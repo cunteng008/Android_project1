@@ -344,9 +344,7 @@ public class daygramActivity extends AppCompatActivity {
                     return;
                 }
                 if(mPresentMonth != mSelectMonth || mPresentYear!= mSelectYear){
-                    mSelectMonth = mPresentMonth;
-                    mSelectYear = mPresentYear;
-                    mTextYear.setText("2016");
+                    selectYear(mPresentYear,0);
                     selectRadioGroupMonth(mPresentMonth);
                     upDateData(mSelectYear, mSelectMonth);
                 }
