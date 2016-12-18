@@ -101,7 +101,7 @@ public class daygramActivity extends AppCompatActivity {
     private TextView mTextYear5;
     private TextView mTextYear6;
 
-    
+
     //设置查看日记开关
     private boolean mViewImageViewSwitch = false;
     //设置信息

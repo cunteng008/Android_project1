@@ -176,7 +176,7 @@ public class inputPasswordActivity extends AppCompatActivity {
         }
     };
 
-    private CountDownTimer InputShowTimer = new CountDownTimer(800,800) {
+    private CountDownTimer InputShowTimer = new CountDownTimer(300,300) {
         @Override
         public void onTick(long millisUntilFinished) {
         }
@@ -244,9 +244,9 @@ public class inputPasswordActivity extends AppCompatActivity {
         if(mType == LONG_IN){
             //关闭整个程序
             SysApplication.getInstance().exit();
-        }else if(mType == LOCK_ON || mType == LOCK_OFF){
+        }else if(mType == LOCK_ON || mType == LOCK_OFF ||mType == RESET_LOCK){
             Intent mIntent = new Intent(inputPasswordActivity.this,settingActivity.class);
-            mIntent.putExtra("input_password", LOCK_OFF+"");
+            //mIntent.putExtra("input_password", LOCK_OFF+"");
             startActivity(mIntent);
         }
         super.onBackPressed();
