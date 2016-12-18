@@ -4,12 +4,14 @@
     android:id="@+id/activity_setting"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="7"
         android:scrollbars="vertical">
        <LinearLayout
            android:layout_width="match_parent"
@@ -25,9 +27,7 @@
                    android:layout_width="match_parent"
                    android:layout_height="70dp"
                    android:orientation="horizontal"
-                   android:gravity="center_vertical"
-                   android:layout_marginTop="0dp"
-                   android:layout_marginLeft="10dp">
+                   android:gravity="center_vertical">
                    <TextView
                        android:id="@+id/black_bar1"
                        android:layout_width="5dp"
@@ -43,8 +43,7 @@
                <LinearLayout
                    android:layout_width="match_parent"
                    android:layout_height="40dp"
-                   android:gravity="center_vertical"
-                   android:layout_marginLeft="10dp">
+                   android:gravity="center_vertical">
                    <TextView
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
@@ -60,7 +59,6 @@
                <LinearLayout
                    android:layout_width="match_parent"
                    android:layout_height="40dp"
-                   android:layout_marginLeft="10dp"
                    android:gravity="center_vertical">
                    <TextView
                        android:layout_width="wrap_content"
@@ -74,8 +72,7 @@
                android:layout_width="match_parent"
                android:layout_height="50dp"
                android:gravity="center_vertical"
-               android:orientation="horizontal"
-               android:layout_marginLeft="10dp">
+               android:orientation="horizontal">
                <TextView
                    android:layout_width="5dp"
                    android:layout_height="10dp"
@@ -96,7 +93,6 @@
            <LinearLayout
                android:layout_width="match_parent"
                android:layout_height="50dp"
-               android:layout_marginLeft="10dp"
                android:gravity="center_vertical">
                <RelativeLayout
                    android:layout_width="match_parent"
@@ -129,7 +125,6 @@
                        android:id="@+id/radio_scoll"
                        android:layout_width="wrap_content"
                        android:layout_height="wrap_content"
-                       android:layout_marginRight="8dp"
                        android:layout_alignParentRight="true">
                        <RadioGroup
                            android:id="@+id/lock_radio_group"
@@ -176,35 +171,30 @@
        </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight= "1"
-        android:orientation="vertical">
-        <LinearLayout
+        android:layout_weight= "1">
+        <View
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-        </LinearLayout>
-
-        <LinearLayout
+            android:layout_height="0.5dp"
+            android:background="#100f0f"
+            android:layout_alignParentTop="true"/>
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <ImageView
-                    android:id="@+id/setting_imageView"
-                    android:layout_width="80dp"
-                    android:layout_height="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:src="@drawable/set"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"/>
-            </RelativeLayout>
-        </LinearLayout>
-    </LinearLayout>
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Copyright @ 2016 Mingjing Chen"
+            android:textSize="12dp"
+            android:textColor="#d2c5c5"/>
+        <ImageView
+            android:id="@+id/setting_imageView"
+            android:layout_width="80dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="20dp"
+            android:src="@drawable/set"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
 
 </LinearLayout>

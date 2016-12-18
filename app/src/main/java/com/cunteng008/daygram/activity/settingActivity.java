@@ -1,6 +1,5 @@
 package com.cunteng008.daygram.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,10 +8,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
 
 import com.cunteng008.daygram.R;
-import com.cunteng008.daygram.constant.Constant;
 
 import static com.cunteng008.daygram.constant.Constant.LOCK_OFF;
 import static com.cunteng008.daygram.constant.Constant.LOCK_ON;
@@ -38,7 +35,7 @@ public class settingActivity extends AppCompatActivity {
         mButtonResetLock = (Button) findViewById(R.id.lock_reset);
         mSettingImageView = (ImageView)findViewById(R.id.setting_imageView);
 
-        if (daygramActivity.mMyLock.isLock()) {
+        if (daygramActivity.mMySettingInfo.isLock()) {
             mRadioButtonLockOn.setChecked(true);
         } else {
             mRadioButtonLockOff.setChecked(true);
@@ -85,7 +82,7 @@ public class settingActivity extends AppCompatActivity {
         if(resultCode!= Activity.RESULT_OK)  //请求失败
             return;
         if(requestCode == 3){    //对应启动的代号3
-           if(daygramActivity.mMyLock.isLock()){
+           if(daygramActivity.mMySettingInfo.isLock()){
                mRadioButtonLockOn.setChecked(true);
            }else {
                mRadioButtonLockOff.setChecked(true);

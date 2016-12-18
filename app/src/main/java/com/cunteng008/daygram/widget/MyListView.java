@@ -53,7 +53,7 @@ public class MyListView extends ListView implements OnScrollListener {
 	}
 	private void init(Context context) {
 		LayoutInflater inflater=LayoutInflater.from(context);
-		view = inflater.inflate(R.layout.list_refresh_headerview, null);
+		view = inflater.inflate(R.layout.mylistview_headerview, null);
 		tv_title = (TextView) view.findViewById(R.id.tv_title);
 
 		measureHeaderview(view);

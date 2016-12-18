@@ -9,7 +9,8 @@ import android.widget.FrameLayout;
 /**
  * Created by CMJ on 2016/12/16.
  */
-
+//在Activity的oncreate()方法里调用AndroidBug5497Workaround.assistActivity(this);
+//解决全屏下布局重置问题
 public class AndroidBug5497Workaround {
     // For more information, see https://code.google.com/p/android/issues/detail?id=5497
     // To use this class, simply invoke assistActivity() on an Activity that already has its content view set.

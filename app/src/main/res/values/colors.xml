@@ -6,4 +6,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="select_year">#393636</color>
+    <color name="not_select_year">#a69797</color>
 </resources>

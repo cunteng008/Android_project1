@@ -2,8 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <!-- 添加一个ListView控件 -->
        <com.cunteng008.daygram.widget.MyListView
@@ -14,71 +13,294 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:divider="@android:color/transparent"
         android:dividerHeight="10dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
         android:listSelector="@android:color/transparent"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_alignWithParentIfMissing="false">
-        <Spinner
-            android:id="@+id/month_spinner"
-            android:entries="@array/months"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight = "1"/>
-        <Spinner
-            android:id="@+id/year_spinner"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight = "1"/>
+        android:layout_alignParentBottom="true">
         <LinearLayout
-            android:layout_width="0dp"
+            android:visibility="visible"
+            android:id="@+id/function_selection"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
             android:gravity="center"
-            android:padding="0dp">
-            <ImageView
-                android:id="@+id/add_imageView"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:padding="0dp"
-                android:src="@drawable/add"/>
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_alignWithParentIfMissing="false">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.3">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical">
+                    <View
+                        android:layout_width="6dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentLeft="true"
+                        android:background="#000000"/>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/text_month"
+                    android:entries="@array/months"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text = "December"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.9">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="15dp"
+                        android:background="#000000"/>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/text_year"
+                    android:entries="@array/months"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="6"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text = "2016"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="15dp"
+                        android:background="#000000"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="0dp">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight = "5"
+                    android:gravity="center">
+                    <RelativeLayout
+                        android:id="@+id/relativeLayout_add"
+                        android:layout_width="17dp"
+                        android:layout_height="match_parent">
+                        <View
+                            android:layout_width="3dp"
+                            android:layout_height="17dp"
+                            android:layout_centerInParent="true"
+                            android:background="#000000" />
+                        <View
+                            android:layout_width="3dp"
+                            android:layout_height="17dp"
+                            android:layout_centerInParent="true"
+                            android:background="#000000"
+                            android:rotation="90" />
+                    </RelativeLayout>
+                </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center">
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="15dp"
+                        android:background="#000000"/>
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/add_imageView"
+                    android:visibility="gone"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="0dp"
+                    android:src="@drawable/add"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="0dp">
+                <ImageView
+                    android:id="@+id/view_imageView"
+                    android:layout_width="80dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/view_all_diary"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:padding="0dp">
+                <ImageView
+                    android:id="@+id/setting_imageView"
+                    android:layout_width="80dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/set"/>
+            </LinearLayout>
         </LinearLayout>
+        <HorizontalScrollView
+            android:visibility="gone"
+            android:id="@+id/scrollView_month"
+            android:scrollbars="none"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foregroundGravity="center">
+            <RadioGroup
+                android:id="@+id/radioGroup_month"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/radioButton_JAN"
+                    android:textStyle="bold"
+                    android:text="JAN"
+                    android:layout_marginRight="5dp"
+                    style="@style/RadioButtonStyle" />
+                <RadioButton
+                    android:id="@+id/radioButton_FEB"
+                    android:textStyle="bold"
+                    android:text="FEB"
+                    style="@style/RadioButtonStyle" />
+                <RadioButton
+                    android:id="@+id/radioButton_MAR"
+                    android:textStyle="bold"
+                    android:text="MAR"
+                    style="@style/RadioButtonStyle" />
+                <RadioButton
+                    android:id="@+id/radioButton_APR"
+                    android:textStyle="bold"
+                    android:text="APR"
+                    style="@style/RadioButtonStyle" />
+                <RadioButton
+                    android:id="@+id/radioButton_MAY"
+                    android:textStyle="bold"
+                    android:text="MAY"
+                    style="@style/RadioButtonStyle" />
+                <RadioButton
+                    android:id="@+id/radioButton_JUN"
+                    android:textStyle="bold"
+                    android:text="JUN"
+                    android:layout_marginRight="5dp"
+                    style="@style/RadioButtonStyle" />
+                <RadioButton
+                    android:id="@+id/radioButton_JUL"
+                    android:textStyle="bold"
+                    android:text="JUL"
+                    style="@style/RadioButtonStyle" />
+                <RadioButton
+                    android:id="@+id/radioButton_AUG"
+                    android:textStyle="bold"
+                    android:text="AUG"
+                    style="@style/RadioButtonStyle" />
+                <RadioButton
+                    android:id="@+id/radioButton_SEP"
+                    android:textStyle="bold"
+                    android:text="SEP"
+                    style="@style/RadioButtonStyle" />
+                <RadioButton
+                    android:id="@+id/radioButton_OCT"
+                    android:textStyle="bold"
+                    android:text="OCT"
+                    style="@style/RadioButtonStyle" />
+                <RadioButton
+                    android:id="@+id/radioButton_NOV"
+                    android:textStyle="bold"
+                    android:text="NOV"
+                    style="@style/RadioButtonStyle" />
+                <RadioButton
+                    android:id="@+id/radioButton_DEC"
+                    android:textStyle="bold"
+                    android:text="DEC"
+                    style="@style/RadioButtonStyle" />
+            </RadioGroup>
+        </HorizontalScrollView>
+
         <LinearLayout
-            android:layout_width="0dp"
+            android:visibility="gone"
+            android:id="@+id/linearLayout_year"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:padding="0dp">
-
-            <ImageView
-                android:id="@+id/view_imageView"
-                android:layout_width="80dp"
-                android:layout_height="20dp"
-                android:src="@drawable/view_all_diary"/>
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/text_year1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/not_select_year"
+                android:text = "2016"/>
+            <TextView
+                android:id="@+id/text_year2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/not_select_year"
+                android:text = "2016"/>
+            <TextView
+                android:id="@+id/text_year3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/not_select_year"
+                android:text = "2016"/>
+            <TextView
+                android:id="@+id/text_year4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/not_select_year"
+                android:text = "2016"/>
+            <TextView
+                android:id="@+id/text_year5"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/not_select_year"
+                android:text = "2016"/>
+            <TextView
+                android:id="@+id/text_year6"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/not_select_year"
+                android:text = "2016"/>
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:padding="0dp">
-
-            <ImageView
-                android:id="@+id/setting_imageView"
-                android:layout_width="80dp"
-                android:layout_height="20dp"
-                android:src="@drawable/set"/>
-        </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
 

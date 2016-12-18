@@ -12,8 +12,11 @@
         android:id="@+id/head"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:paddingRight="25dp"
+        android:paddingLeft="25dp"
         android:gravity="center"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
         android:orientation="vertical">
         <TextView
             android:id="@+id/iputTextTitle"
@@ -22,10 +25,11 @@
             android:text="@id/iputTextTitle"
             android:textSize="20sp"
             android:layout_marginBottom="10dp"/>
-        <TextView
+        <View
             android:layout_width="250dp"
             android:layout_height="1dp"
             android:background="#0d0c0c"
+            android:paddingBottom="5dp"
             android:layout_alignParentBottom="true"/>
     </LinearLayout>
 
@@ -33,12 +37,13 @@
         android:id="@+id/foot"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:layout_alignParentBottom="true">
         <Button
             android:id="@+id/Done"
             android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
             android:text="@string/DONE"
             android:layout_alignParentLeft="true"/>
         <Button
@@ -46,23 +51,17 @@
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:text="TIME"
-            android:layout_marginRight="10dp"
             android:layout_alignParentRight="true"/>
-
     </RelativeLayout>
 
-
     <EditText
+        android:paddingRight="25dp"
+        android:paddingLeft="25dp"
         android:id="@+id/editText"
         android:layout_above="@id/foot"
         android:layout_below="@id/head"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="top"
-        android:background="@null"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"/>
-
-
-
+        android:background="@null"/>
 </RelativeLayout>

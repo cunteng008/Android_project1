@@ -37,5 +37,6 @@
         android:layout_weight="6"
         android:maxLines="2"
         android:ellipsize="end"
-        android:paddingLeft="5dp"/>
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"/>
 </LinearLayout>

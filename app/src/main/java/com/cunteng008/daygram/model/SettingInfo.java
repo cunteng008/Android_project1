@@ -6,14 +6,10 @@ import java.io.Serializable;
  * Created by CMJ on 2016/12/15.
  */
 
-public class Lock implements Serializable {
+public class SettingInfo implements Serializable {
     //是否有锁，默认没有
-    private boolean mLock ;
-    private String  mPassword ;
-    public Lock(boolean lock, String password){
-        mLock = lock;
-        mPassword = password;
-    }
+    private boolean mLock = false;
+    private String  mPassword = "1234";
 
     public boolean isLock() {
         return mLock;

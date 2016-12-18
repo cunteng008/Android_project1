@@ -1,9 +1,6 @@
 package com.cunteng008.daygram.activity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.media.Image;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -84,17 +81,17 @@ public class inputPasswordActivity extends AppCompatActivity {
                 Log.d("afterTextChanged","输入了"+s);
                 if(mInputPassword.length()==4){
                     if(mNewPsdIputTimes==-1){  //没新密码输入
-                        if(mInputPassword.equals(daygramActivity.mMyLock.getPassword())){
+                        if(mInputPassword.equals(daygramActivity.mMySettingInfo.getPassword())){
                             if (mType == LONG_IN){
                                 finish();
                             }else if(mType == LOCK_OFF){
-                                daygramActivity.mMyLock.setLock(false);
+                                daygramActivity.mMySettingInfo.setLock(false);
                                 Intent mIntent = new Intent(inputPasswordActivity.this,settingActivity.class);
                                 mIntent.putExtra("input_password", LOCK_OFF+"");
                                 startActivity(mIntent);
                                 finish();
                             }else if(mType == LOCK_ON){
-                                daygramActivity.mMyLock.setLock(true);
+                                daygramActivity.mMySettingInfo.setLock(true);
                                 Intent mIntent = new Intent(inputPasswordActivity.this,settingActivity.class);
                                 mIntent.putExtra("input_password", LOCK_OFF+"");
                                 startActivity(mIntent);
@@ -121,7 +118,7 @@ public class inputPasswordActivity extends AppCompatActivity {
                         InputShowTimer.start();
                     }else if(mNewPsdIputTimes == 1  ){  //新密码输入二次
                         if(mNewPsd.equals(mInputPassword)){
-                            daygramActivity.mMyLock.setPassword(mNewPsd);
+                            daygramActivity.mMySettingInfo.setPassword(mNewPsd);
                             Intent mIntent = new Intent(inputPasswordActivity.this,settingActivity.class);
                             mIntent.putExtra("input_password", LOCK_OFF+"");
                             startActivity(mIntent);
@@ -263,7 +260,7 @@ public class inputPasswordActivity extends AppCompatActivity {
             handler.postDelayed(updateThread, 10);
             mInputPassword = mEditPassword.getText().toString();
             if(mInputPassword.length()==4){
-                if(mInputPassword.equals(mMyLock)){
+                if(mInputPassword.equals(mMySettingInfo)){
                     finish();
                 }else {
                     mInputHint.setVisibility(View.GONE);
