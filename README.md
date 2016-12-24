@@ -1,0 +1,35 @@
+#daygram
+一款日记应用
+===========================
+本app是模仿应用商城上的Daygram用自己的方式实现的
+****
+###　　　　　　　　　　　　Author:cunteng008
+###　　　　　　　　　 E-mail:mingjingc3721@gmail.com
+  
+===========================
+<h3>关键技术点</h3>
+<pre><code>1.sitview显示多种布局，需要重写baseAdapter, 但要注意这里一定要修改 public int getViewTypeCount()，以确定最多使用的布局种数，否则程序会在运行时崩溃
+
+2.startActivityForResult(mIntent,1)这里的1是本次操作的代号，可以设任意数，但要在onActivityResult()对相应的操作代号的操作进行处理
+3.文件的存取为了简便，将每月的数据存到了一个独立的文件，当读取文件的函数返回null时则视为没有任何数据，需用空字符串为初始化。在用listview显示是，字符串长度为0则显示点。
+4.在阅览日记时mViewImageViewSwitch开关打开，表示正在处于阅览状态。可对阅览的日记做相应的操作，再按一次阅览的按钮时回到原界面,若在阅览状态下对日记进行修改，修改完成后要重新调用函数刷新阅览的内容，总的内容也要更新，一确保在返回原界面时显示的数据同步
+5.Data类存的是日记的数据，除了内容外全为整数，新建一个类放星期和月份的字符串常量，以便调用。
+6.刷新数据后再显示时为了保证listtem的位置保持不变，可以调用notifyDataSetChanged()，而不必调用setAdapter重新设置一次。
+7.注意get(Calendar.MONTH)取到的数从0开始
+8. 预览日记最多显示两行   android:maxLines="2” android:ellipsize="end"
+9. 在非全屏模式下，将activity的windowSoftInputMode的属性设置为：adjustResize。同时在View的onSizeChanged(int w, int h, int oldw, int oldh)里可以得到变化后的尺寸，然后根据前后变化的结果来计算屏幕需要移动的距离。
+ <activity
+       android:name=".activity.iputTextActivity"
+       android:windowSoftInputMode="adjustResize">
+ </activity>
+但是在全屏模式下，即使将activity的windowSoftInputMode的属性设置为：adjustResize。在键盘显示时它未将Activity的Screen向上推动，所以你Activity的view的根树的尺寸是没有变化的。在这种情况下，你也就无法得知键盘的尺寸，对根view的作相应的推移。github上已有封装好了的方法 AndroidBug5497Workaround()，我们使用时直接将语句AndroidBug5497Workaround.assistActivity(this);放在setContentView();之后即可10. RadioGroup加RadioButton可以实现原型单选框。可以实现自己的style="@style/RadioButtonStyle"
+11. android:visibility="gone"的利用可以实现一个布局内多种子布局的相互切换，本应用的首页底部控件正是如此实现。
+12.密码的输入其实就是利用textedit的监听addTextChangedListener()和textview、11点钟的布局切换、timer倒计时等实现的。实现的方法是每输入一个数就将一个圆形的textview的背景染黑，删除就染成默认染色，输入完后数据若没出错，则延迟显示0.3s
+
+CountDownTimer(300,300)
+出现错误或重置密码时前后不一则显示红色警告0.8s,在布局中限制textedit输入的数输入据类型为数字和长度为4,
+13.超过下拉利用了刷新的方法显现headview
+
+</code></pre>
+
+
