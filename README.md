@@ -32,4 +32,23 @@ CountDownTimer(300,300)
 
 </code></pre>
 
+<h3>待解决问题</h3>
+<pre><code>1.数据存储问题。
+目前的用的是文件方式存储所有数据(设置信息和日记数据)，而且是一个月单独存在一个文件，切换月份是都要加载数据，每当改动数据中的某个类的变量，如添加或删除某些类变量时，文件上的数据读取会出错。导致数据的不稳定性。
+2.listview虽然用刷新的办法加上的headview(此应用用来显示动态时间),但体验不够流畅，感觉阻力太大，与应用商城上的Daygram相比，自己的仍很差。虽然android有个实现很相似的办法@Override
+protected boolean overScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX, int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent)
+{
+		return super.overScrollBy(deltaX, deltaY, scrollX, scrollY, scrollRangeX, scrollRangeY, maxOverScrollX, mMaxYOverscrollDistance, isTouchEvent);
+}
+但添加headview时就不能实现相同的效果。
+3.日记预览方框的线条的背景还不能做到透明，这样想要切换主题时实现的效果很差。
+4. startActivityForResult因为在设置输入密码的相关activity时，finish后还有无法销毁acitvity，而不得不放弃用另一种方法。
+5.底部的控件切换实现过于繁琐，容易漏掉设置某些内容二出错。特别是底部的年份控件设置，其实是利用了六个textview的点击事件加上一些自定义函数实习单选效果，但繁琐度过大，自己调试完后那方面还后续还做了两次小问题修复。
+……
+
+</code></pre>
+
+<h3>调试一些结果截图</h3>
+
+
 
