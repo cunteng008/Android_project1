@@ -47,8 +47,3 @@ protected boolean overScrollBy(int deltaX, int deltaY, int scrollX, int scrollY,
 ……
 
 </code></pre>
-
-<h3>调试一些结果截图</h3>
-
-
-
